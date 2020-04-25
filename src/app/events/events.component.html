@@ -1,0 +1,207 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-5">
+                    <mat-form-field>
+                            <mat-select  [(ngModel)]="region"  placeholder="Region"  required style="size:22px">
+                             <mat-option *ngFor="let region of regions" [value]="region" (click)="onChange($event)" >
+                               {{region}}
+                             </mat-option>
+                             </mat-select>
+                          </mat-form-field>
+            </div>
+        </div>
+      
+        <div class="row">
+
+                <div class="col-md-3">
+                        <div class="card" *ngIf="adding, else editing">
+                            <div class="card-header card-header-icon card-header-primary">
+                              <div class="card-icon">
+                                  <i class="material-icons">edit</i>
+                              </div>
+                              <h4 class="card-title">Event</h4>
+                            </div>
+                            <div class="card-body">
+                            
+       
+                                     <form [formGroup] = "myForm" (ngSubmit)="submitHandler()" >
+                            
+                                            <mat-form-field class="example-full-width">
+                                              <input matInput formControlName="name" type="text" placeholder="Title">
+                                            </mat-form-field>                           
+                                            <div class="row">
+                                          
+                                                <div class="col-md-7">
+        
+                                                        <mat-form-field >
+                                                                <input matInput [matDatepicker]="picker2" formControlName="startdate" placeholder="Start date">
+                                                                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                                                <mat-datepicker #picker2></mat-datepicker>
+                                                              </mat-form-field>
+                                                </div>
+                                                <div class="col-md-5">
+                                                        <mat-form-field class="example-full-width">
+                                                                <input matInput type="text" formControlName="starttime"  placeholder="Start time">
+                                                             </mat-form-field>
+                                                </div>                                          
+                                            </div>
+        
+                                            <div class="row">
+                                                    <div class="col-md-7">
+                                                            <mat-form-field >
+                                                                    <input matInput [matDatepicker]="picker1" formControlName="enddate" placeholder="End date" (click)="picker.open()">
+                                                                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                                                    <mat-datepicker #picker1></mat-datepicker>
+                                                                  </mat-form-field>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                            <mat-form-field class="example-full-width">
+                                                                    <input matInput type="text" formControlName="endtime" placeholder="End time" style="size:10em">
+                                                              </mat-form-field>
+                                                    </div>                                          
+                                                </div>
+                                            
+                                                <mat-form-field class="example-full-width">
+                                                    <input matInput type="text" formControlName="venue" placeholder="venue">
+                                                  </mat-form-field>   
+                                 
+                                        <mat-form-field class="example-full-width">
+                                          <input matInput type="text" formControlName="description" placeholder="description">
+                                        </mat-form-field>
+                               
+                                        <mat-form-field class="example-full-width">
+                                            <textarea formControlName="message" matInput placeholder="Message" rows="8"></textarea>
+                                          </mat-form-field> 
+                                
+                                        <button type="submit" [disabled]="myForm.invalid" mat-raised-button class="btn btn-primary pull-right">Save</button>
+        
+                              </form>
+                          </div>
+                        </div>
+                       <ng-template #editing>
+                            <div class="card" >
+                                    <div class="card-header card-header-icon card-header-danger">
+                                      <div class="card-icon">
+                                          <i class="material-icons">edit</i>
+                                      </div>
+                                      <h4 class="card-title">Edit/Add Event</h4>
+                                    </div>
+                                    <div class="card-body">
+                                             <form [formGroup]="myEditForm">
+                                                   <mat-form-field>
+                                                     <mat-select placeholder="Region" formControlName="type"  required>
+                                                      <mat-option *ngFor="let region of regions" [value]="region">
+                                                        {{region}}
+                                                      </mat-option>
+                                                      </mat-select>
+                                                   </mat-form-field>
+                                                   <mat-form-field class="example-full-width">
+                                                      <input matInput type="text" formControlName="name" placeholder="Title">
+                                                    </mat-form-field>                           
+                                                    <div class="row">
+                                                        <div class="col-md-7">
+                                                                <mat-form-field >
+                                                                        <input matInput [matDatepicker]="picker2" formControlName="startdate" placeholder="Start date" (click)="picker.open()">
+                                                                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                                                        <mat-datepicker #picker2></mat-datepicker>
+                                                                      </mat-form-field>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                                <mat-form-field class="example-full-width">
+                                                                        <input matInput type="text" formControlName="starttime" placeholder="Start time">
+                                                                    </mat-form-field>
+                                                        </div>                                          
+                                                    </div>
+                
+                                                    <div class="row">
+                                                            <div class="col-md-7">
+                                                                    <mat-form-field >
+                                                                            <input matInput [matDatepicker]="picker1" formControlName="enddate" placeholder="End date" (click)="picker.open()">
+                                                                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                                                            <mat-datepicker #picker1></mat-datepicker>
+                                                                          </mat-form-field>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                    <mat-form-field class="example-full-width">
+                                                                            <input matInput  type="text" formControlName="endtime" placeholder="End time" style="size:10em">
+                                                                           
+                                                                          </mat-form-field>
+                                                            </div>                                          
+                                                        </div>
+        
+                                                        <mat-form-field class="example-full-width">
+                                                            <input matInput type="text" formControlName="venue" placeholder="venue">
+                                                          </mat-form-field>   
+                
+                                         
+                                                <mat-form-field class="example-full-width">
+                                                  <input matInput type="text" formControlName="description" placeholder="description">
+                                                </mat-form-field>
+                                       
+                                                <mat-form-field class="example-full-width">
+                                                    <textarea matInput formControlName="message" class="form-control" placeholder="Message" rows="8"></textarea>
+                                                  </mat-form-field> 
+                                                  
+                                                <button (click) = "onCancelEdit()" mat-raised-button class="btn btn-primary pull-right">Cancel</button>
+                                                <button (click)="updateHandler()" mat-raised-button class="btn btn-primary pull-right">Update</button>
+        
+                                      </form>
+                                  </div>
+                                </div>
+                       </ng-template>
+                      
+                    </div>
+            <div class="col-md-9">
+                <div class="card">
+                  <div class="card-header card-header-primary card-header">
+                   
+                    <h4 class="card-title">Events</h4>
+                    <p class="card-category">Events list</p>
+
+                  </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                          <th class="">{{ tableData1.headerRow[0] }}</th>
+                                          <th>{{ tableData1.headerRow[1] }}</th>
+                                          <th>{{ tableData1.headerRow[2] }}</th>
+                                          <th>{{ tableData1.headerRow[3] }}</th>
+                                          <th>{{ tableData1.headerRow[4] }}</th>
+                                        
+                                        </tr>
+                                    </thead>
+                                  <tbody>
+                                      <tr *ngFor="let event of events | async">
+                                          <td class="">{{event.name}}</td>
+                                          <td>{{event.description}}</td>
+                                          <td>{{event.startdate.toDate()|date:'mediumDate'}}</td>
+                                          <td>{{event.enddate.toDate()|date:'mediumDate'}}</td>
+                                          <td>{{event.venue}}</td>
+                                        
+                               
+                          
+                                          <td class="td-actions text-right">
+                                            
+                                              <button mat-raised-button (click)="showEdit(event)" type="button" class="btn btn-success btn-link">
+                                                  <i class="material-icons">edit</i>
+                                              </button>
+                                              <button mat-raised-button (click)="onDelete(event.id)" type="button" class="btn btn-danger btn-link">
+                                                  <i class="material-icons">close</i>
+                                              </button>
+                                          </td>
+                                      </tr>
+                                  </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+          
+        </div>
+    </div>
+</div>

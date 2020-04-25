@@ -1,0 +1,313 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-10" *ngIf="adding, else editing">
+          <div class="row">
+              <div class="card">
+                  <div class="card-header card-header-icon card-header-primary">
+                    <div class="card-icon">
+                      <i class="material-icons"></i>
+                    </div>
+                    <h4 class="card-title">New Program</h4>
+                  </div>
+
+                  <div class="card-body">
+                <div class="row">
+
+                    <div class="col-sm-12" >
+                        <mat-form-field class="example-full-width">
+                          <input  matInput type="text" [(ngModel)]="title" placeholder="Title">
+                        </mat-form-field>
+
+                      </div>
+                      
+
+
+                    <div  class="col-md-10 pull-center">
+
+                              <mat-select [(ngModel)]="category"  placeholder="Select Category"  required>
+                                  <mat-option  *ngFor="let cat of categories" [value]="cat" (click)="onfilter(cat)" >
+                                      {{cat}}
+                                  </mat-option>
+                                  </mat-select>
+                                  <br/><br/>
+                    </div>
+
+
+                    <div class="col-md-12">
+                            <mat-form-field >
+                                <input matInput [matDatepicker]="picker" [(ngModel)]="date" placeholder="Choose a date" (click)="picker.open()">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-sm-12" style="margin-top: 20px;margin-bottom: 20px">
+
+<!--                                    <editor matInput  apiKey="qfd5itseojeaaonddzigmpmvexi856ruk6qls1g2imb7vjsh"-->
+<!--                                                                                [init]="{-->
+<!--                                                                                height: 400,-->
+
+<!--                                                                                plugins: [-->
+<!--                                                                                'advlist autolink lists link image charmap print preview anchor',-->
+<!--                                                                                'searchreplace visualblocks code fullscreen',-->
+<!--                                                                                'insertdatetime media table paste code help wordcount'-->
+<!--                                                                                ]-->
+<!--   }"-->
+<!--                                            [(ngModel)]="description"></editor>-->
+                                <div matInput [(ngModel)]="description" [ngxSummernote]="config"></div>
+
+
+                            </div>
+
+                
+                           
+                            <input type="file" accept="video/mp4" id="fUpload" (change)="uploadFile($event)" />
+                                <mat-progress-bar style="margin-top: 20px" mode="determinate" class="progress-bar progress-bar-danger" value="{{uploadPercent|async}}"></mat-progress-bar>
+                           <button [hidden]="getCancelButton" mat-raised-button class="btn btn-primary pull-left"  (click)="cancel()">Cancel</button>
+                
+    
+                            <div class="col-sm-12">
+                                <button (click)="save()" [disabled]="save_disabled" mat-raised-button class="btn btn-primary pull-right">Save</button>
+                              </div>
+                            </div>  
+                </div>
+              </div>
+              <ng-template #editing>
+                  <div class="col-md-12">
+                      <div class="card">
+                          <div class="card-header card-header-icon card-header-primary">
+                            <div class="card-icon">
+                              <i class="material-icons"></i>
+                            </div>
+                            <h4 class="card-title">Edit Podcast</h4>
+                          </div>
+                    
+                          <div class="card-body">
+                        <div class="row">
+            
+                                  <mat-form-field>
+                                      <mat-select [(ngModel)]="apseries"  placeholder="Select Program"  required>
+                                       <mat-option   *ngFor="let series of serieses" [value]="series" (click)="onfilter(series.id)">
+                                         {{series}}
+                                       </mat-option>
+                                       </mat-select>
+                                    </mat-form-field>
+                            
+                           
+                                <div class="col-md-12">
+                                    <mat-form-field >
+                                        <input matInput [matDatepicker]="picker" [(ngModel)]="date" placeholder="Choose a date" (click)="picker.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                      </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <mat-form-field class="example-full-width">
+                                          <input matInput type="text" [(ngModel)]="title" placeholder="title">
+                                        </mat-form-field>
+                                      </div>
+             
+                                    <div class="col-sm-12">
+                                      <mat-form-field class="example-full-width">
+                                          <editor apiKey="test" [init]="{plugins: 'link'}" [(ngModel)]="description"></editor>
+
+                                      </mat-form-field>
+                                    </div>
+                                   
+                                    <input type="file" (change)="uploadFile($event)" />
+                                        <mat-progress-bar mode="determinate" class="progress-bar progress-bar-danger" value="{{uploadPercent|async}}"></mat-progress-bar>
+                                   
+                                        <div class="col-sm-12">
+                                            <button (click)="onCancelEdit()"  mat-raised-button class="btn btn-primary pull-right">Cancel</button>
+                                          </div>
+            
+                                    <div class="col-sm-12">
+                                        <button (click)="update()"  mat-raised-button class="btn btn-primary pull-right">Update</button>
+                                      </div>
+                                    </div>  
+                        </div>
+                      </div>
+                  </div>
+                  </ng-template>
+<!--                  <div class="card">-->
+<!--                      <div class="card-header card-header-icon card-header-primary">-->
+<!--                          <div class="card-icon">-->
+<!--                            <i class="material-icons"></i>-->
+<!--                          </div>-->
+<!--                          <h4 class="card-title">Live Stream</h4>-->
+<!--                        </div>-->
+<!--            -->
+<!--                      <div class="card-body">-->
+<!--            -->
+<!--                        <div class="row">-->
+<!--                            <div class="col-md-8">-->
+<!--                                <mat-form-field class="example-full-width">-->
+<!--                                    <input (blur)="updatevids()" [(ngModel)]="cms.livestream" matInput type="text" placeholder="Livestream Id">-->
+<!--                                  </mat-form-field>-->
+<!--                            </div>-->
+<!--            -->
+<!--                            <div class="col-md-4">-->
+<!--                                <mat-form-field class="example-full-width">-->
+<!--                                    <input (blur)="updatevids()" [(ngModel)]="cms.livestream" matInput type="text" placeholder="Starts at">-->
+<!--                                  </mat-form-field>-->
+<!--                            </div>-->
+
+<!--                            <div class="col-sm-12">-->
+<!--                                <button (click)="save()" [disabled]="save_disabled" mat-raised-button class="btn btn-primary pull-right">Save</button>-->
+<!--                              </div>-->
+<!--                           -->
+<!--                        </div>-->
+<!--            -->
+<!--                      </div>-->
+<!--                      -->
+<!--                    </div>-->
+            
+        </div>
+        </div>
+      <div class="col-md-8">
+        <div class="row">
+    
+            <div class="col-md-12">
+              
+                  <div class="card">
+                      <div class="card-header card-header-icon card-icon card-header-primary">
+                          <div class="card-icon card-danger">
+                            <i class="material-icons">fitness_center
+                            </i>
+                          
+                          </div>
+                          <h4 class="card-title">Programs</h4>
+                      
+                      </div>
+                      <div class="card-body">
+                         <div class="row">
+                           <div class="col-md-7"></div>
+                          <div class="col-md-5 pull-right">
+                            <span>
+                              <h4>Categories</h4>
+                              <mat-select [(ngModel)]="category"  placeholder="Select Category"  required>
+                                  <mat-option *ngFor="let series of serieses |async" [value]="series.id" (click)="onfilter(series.id)">
+                                  <h4>{{series.title}}</h4>
+                                  </mat-option>
+                                  </mat-select>
+                                  <br/><br/>
+                                </span>
+                          </div>
+                          <div class=" col-md-12 table-responsive">
+                              <table class="table">
+                                      <thead>
+                                          <tr>
+                                            <th>{{ tableData1.headerRow[0] }}</th>
+                                            <th>{{ tableData1.headerRow[1] }}</th>
+                                       
+                                            <th class="text-right">{{ tableData1.headerRow[4] }}</th>
+                                            <th class="text-right">{{ tableData1.headerRow[5] }}</th>
+                                          </tr>
+                                      </thead>
+                                    <tbody>
+                                        <tr *ngFor="let podcast of podcasts| async">
+                                            <td width="30%">{{podcast.date.toDate()|date:'mediumDate'}}</td>
+                                            <td width="30%">{{podcast.title}}</td>
+                                          
+                                          
+                                
+                            
+                                            <td  class="td-actions text-right">
+                                          <div class="row">
+                                            <div clas="col-md-11">
+                                                <vg-player style="height: 50px; width: 50px">
+                                                    <vg-controls>
+                                                        <vg-play-pause></vg-play-pause>
+                                                    </vg-controls>
+                                                  
+                                                    <audio #media [vgMedia]="media" id="myAudio" preload="auto">
+                                                        <source  [src]="podcast.url" type="audio/mp3">
+                                                    </audio>
+                                                  </vg-player>
+                                            </div>
+                                            <div class="col-md-1">
+                                              <div class="row">
+                                                <div class="col-md-12">
+                                                    <button mat-raised-button (click)="onShowEdit(podcast)" type="button" class="btn btn-success btn-link">
+                                                        <i class="material-icons">edit</i>
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <button mat-raised-button (click)="onDelete(podcast.id)" type="button" class="btn btn-danger btn-link">
+                                                        <i class="material-icons">close</i>
+                                                    </button> 
+                                                </div>
+                                              </div>
+                                              
+                                              
+                                              </div>
+                                          </div>
+                                                    
+                                          
+                                              
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                              </table>
+                          </div> 
+                        </div>                
+                      </div>
+                    </div>
+            
+                 
+              </div>
+            
+        </div>
+      </div>
+<!--      <div class="col-md-3">-->
+<!--          <div class="card">-->
+<!--              <div class="card-header card-header-icon card-header-primary">-->
+<!--                  <div class="card-icon">-->
+<!--                    <i class="fa fa-youtube" style="size:35em"></i>-->
+<!--                  </div>-->
+<!--                  <h4 class="card-title">Playlists</h4>-->
+<!--                </div>-->
+<!--              <div class="card-body">-->
+<!--                <div class="row" >-->
+<!--                   <div class="col-md-12">-->
+<!--                      <mat-form-field class="example-full-width">-->
+<!--                          <input (blur)="updatevids()"  matInput type="text" placeholder="name">-->
+<!--                        </mat-form-field>-->
+<!--                   </div>-->
+
+<!--                   <div class="col-md-12">-->
+<!--                      <mat-form-field class="example-full-width">-->
+<!--                          <input (blur)="updatevids()"  matInput type="text" placeholder="id">-->
+<!--                        </mat-form-field>-->
+<!--                   </div>-->
+<!--                   <div class="col-sm-12">-->
+<!--                      <button  [disabled]="save_disabled" mat-raised-button class="btn btn-primary pull-right">Save</button>-->
+<!--                    </div>-->
+<!--                 </div>-->
+<!--&lt;!&ndash;                 <div class="row text-center" style="padding:16px">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <table class="table table-responsive">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <thead>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <th>Playlists</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <th class="text-left"></th>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <th></th>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </thead>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <tr *ngFor="let pl of playlist|async">&ndash;&gt;-->
+<!--&lt;!&ndash;                              <td>Eas</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                              <td>erhcugevhoewe</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                              <td><button mat-raised-button type="button" class="btn btn-danger btn-link">&ndash;&gt;-->
+<!--&lt;!&ndash;                                  <i class="material-icons">close</i>&ndash;&gt;-->
+<!--&lt;!&ndash;                              </button> </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;                      </table>&ndash;&gt;-->
+<!--&lt;!&ndash;                 </div>&ndash;&gt;-->
+<!--                   -->
+<!--              </div>-->
+<!--          </div>-->
+<!--      -->
+<!--        </div>-->
+    
+    </div>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-fall">
+ <p style="font-size: 20px; color: white"></p>
+</ngx-spinner>
+<nav class="navbar navbar-expand-lg bg-primary navbar-transparent navbar-absolute" color-on-scroll="500">
+  <div class="container">
+    <div class="navbar-wrapper">
+      <a class="navbar-brand d-none d-sm-none d-md-block" [routerLink]="['/dashboard']">My PT ZIM</a>
+
+    </div>
+    <button mat-button class="navbar-toggler" type="button" (click)="sidebarToggle()">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="navbar-toggler-icon icon-bar"></span>
+      <span class="navbar-toggler-icon icon-bar"></span>
+      <span class="navbar-toggler-icon icon-bar"></span>
+    </button>
+   
+  </div>
+</nav>
+  <router-outlet></router-outlet>

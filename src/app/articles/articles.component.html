@@ -1,0 +1,134 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-10"  >
+<!--           *ngIf="adding, else editing">-->
+        <div class="row">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-primary">
+              <div class="card-icon">
+                <i class="material-icons">create</i>
+              </div>
+              <h4 class="card-title" [hidden]="editing">New Article</h4>
+              <h4 class="card-title" [hidden]="!editing">Update Article</h4>
+
+
+            </div>
+
+            <div class="card-body">
+              <div class="row">
+
+                <div class="col-sm-12" >
+                  <mat-form-field class="example-full-width">
+                    <input  id="title" matInput type="text" [(ngModel)]="title" placeholder="Title">
+                  </mat-form-field>
+
+                </div>
+
+
+
+<!--                <div  class="col-md-10 pull-center">-->
+
+<!--&lt;!&ndash;                  <mat-select [(ngModel)]="category"  placeholder="Select Category"  required>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <mat-option  *ngFor="let cat of categories" [value]="cat" (click)="onfilter(cat)" >&ndash;&gt;-->
+<!--&lt;!&ndash;                      {{cat}}&ndash;&gt;-->
+<!--&lt;!&ndash;                    </mat-option>&ndash;&gt;-->
+<!--&lt;!&ndash;                  </mat-select>&ndash;&gt;-->
+<!--                  <br/><br/>-->
+<!--                </div>-->
+
+
+                <div class="col-md-12">
+                  <mat-form-field >
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="date" placeholder="Choose a date" (click)="picker.open()">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-12" style="margin-top: 20px;margin-bottom: 20px">
+
+
+                  <div matInput [(ngModel)]="description" [ngxSummernote]="config"></div>
+
+
+                </div>
+          <div style="margin: 20px" [hidden]="editing">
+            <div class="row" >
+              <div class="col-" >
+
+                <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                  <div class="fileinput-new thumbnail">
+                    <img src="./assets/img/image_placeholder.jpg" alt="...">
+                  </div>
+                  <div disabled class="fileinput-preview fileinput-exists thumbnail"></div>
+                  <div>
+        <span class="btn btn-rose btn-round btn-file">
+            <span class="fileinput-new">Select image</span>
+            <span class="fileinput-exists">Change</span>
+            <input type="file" accept="image/*" placeholder="Featured Image" id="fUpload" (change)="uploadFile($event)"name="..." />
+        </span>
+                    <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i (click)="cancel()" class="fa fa-times"></i> Remove</a>
+                  </div>
+                </div>
+            <mat-progress-bar style="margin-top: 20px" mode="determinate" class="progress-bar progress-bar-danger" value="{{uploadPercent|async}}"></mat-progress-bar>
+              </div>
+
+            </div>
+          </div>
+
+                <div class="col-sm-12">
+                  <button (click)="save()" [hidden]="editing" [disabled]="save_disabled" mat-raised-button class="btn btn-primary pull-center">Save</button>
+                  <button (click)="update()" [hidden]="!editing" [disabled]="save_disabled" mat-raised-button class="btn btn-primary pull-center">Update</button>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+
+    </div>
+    <div class="row">
+      <div class="col-md-4" *ngFor="let article of articles ">
+        <div class="card card-product">
+          <div class="card-header card-header-image" data-header-animation="true">
+            <a href="#pablo">
+              <img class="img" src="{{article.image}}">
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="card-actions text-center">
+              <button mat-raised-button type="button" class="btn btn-danger btn-link fix-broken-card">
+                <i class="material-icons">build</i> Fix Header!
+              </button>
+              <button mat-raised-button type="button" (click)="read(article)"  class="btn btn-default btn-link" matTooltip="View" [matTooltipPosition]="'below'">
+                <i class="material-icons">art_track</i>
+              </button>
+              <button mat-raised-button type="button" (click)="showEdit(article)" class="btn btn-success btn-link" matTooltip="Edit" [matTooltipPosition]="'below'">
+                <i class="material-icons">edit</i>
+              </button>
+              <button mat-raised-button type="button"  (click)="onDelete(article.docid)"class="btn btn-danger btn-link" matTooltip="Delete" [matTooltipPosition]="'below'">
+                <i class="material-icons">close</i>
+              </button>
+            </div>
+            <h6 class="card-title">
+              <a >{{article.title}}</a>
+            </h6>
+
+          </div>
+          <div class="card-footer">
+
+            <div class="stats">
+              <h6 class="card-category" style="text-align: center"><i class="material-icons">calendar_today</i>{{article.date.toDate()|date:'mediumDate'}}</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

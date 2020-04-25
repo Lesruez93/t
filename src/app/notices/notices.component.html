@@ -1,0 +1,124 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                  <div class="card-header card-header-primary card-header">
+                   
+                    <h4 class="card-title">Noitces</h4>
+                    <p class="card-category">Notices list</p>
+
+                  </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                    <thead>
+                                        <tr>
+                                          <th class="">{{ tableData1.headerRow[0] }}</th>
+                                          <th>{{ tableData1.headerRow[1] }}</th>
+                                          <th>{{ tableData1.headerRow[2] }}</th>
+                                          <th>{{ tableData1.headerRow[3] }}</th>
+                                          <th class="text-right">{{ tableData1.headerRow[4] }}</th>
+                                          <th class="text-right">{{ tableData1.headerRow[5] }}</th>
+                                        </tr>
+                                    </thead>
+                                  <tbody>
+                                      <tr *ngFor="let notice of notices | async">
+                                          <td class="">{{notice.date.toDate()|date:'mediumDate'}}</td>
+                                          <td>{{notice.notice}}</td>
+                                          <td>{{notice.name}}</td>
+                               
+                          
+                                          <td class="td-actions text-right">
+                                              <button mat-raised-button type="button" class="btn btn-info btn-link">
+                                                  <i class="material-icons">person</i>
+                                              </button>
+                                              <button mat-raised-button type="button" (click)="showEdit(notice)" class="btn btn-success btn-link">
+                                                  <i class="material-icons">edit</i>
+                                              </button>
+                                              <button mat-raised-button type="button" (click)="onDelete(notice.id)"class="btn btn-danger btn-link">
+                                                  <i class="material-icons">close</i>
+                                              </button>
+                                          </td>
+                                      </tr>
+                                  </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header card-header-icon card-header-primary">
+                      <div class="card-icon">
+                          <i class="material-icons">edit</i>
+                      </div>
+                      <h4 class="card-title">Notice</h4>
+                    </div>
+                    <div class="card-body add-form" *ngIf = "adding, else editing" >
+                      <form [formGroup] = "myForm" (ngSubmit)="submitHandler()" >
+                              <mat-form-field >
+                                <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Choose a date" (click)="picker.open()">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                              </mat-form-field>
+
+                              <mat-form-field class="example-full-width">
+                                <input matInput type="text" formControlName="notice" placeholder="Title">
+                              </mat-form-field>
+
+                              <mat-form-field class="example-full-width">
+                                  <input matInput type="text" formControlName="name" placeholder="From">
+                              </mat-form-field>
+        
+                              <mat-form-field class="example-full-width">
+                                    <textarea matInput placeholder="Message" formControlName="message"></textarea>
+                              </mat-form-field> 
+                            
+                                                        
+
+                            <div >
+                                <button type="submit" [disabled]="myForm.invalid" mat-raised-button class="btn btn-primary pull-right">Save</button>
+                            </div>
+
+                      </form>
+                  </div>
+                  <ng-template #editing>
+                        <div class="card-body add-form" >
+                                <form [formGroup] = "myEditForm">
+                                        <mat-form-field >
+                                          <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Choose a date" (click)="picker.open()">
+                                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                          <mat-datepicker #picker></mat-datepicker>
+                                        </mat-form-field>
+          
+                                        <mat-form-field class="example-full-width">
+                                          <input matInput type="text" formControlName="notice" placeholder="Title">
+                                        </mat-form-field>
+          
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput type="text" formControlName="name" placeholder="From">
+                                        </mat-form-field>
+                  
+                                        <mat-form-field class="example-full-width">
+                                              <textarea matInput placeholder="Message" formControlName="message"></textarea>
+                                        </mat-form-field> 
+                                      
+                                                                  
+          
+                                      <div >
+                                            <button (click)="onCancelEdit()" mat-raised-button class="btn btn-primary pull-right">Cancel</button>
+                                          <button (click)="updateHandler()"  mat-raised-button class="btn btn-primary pull-right">Update</button>
+                                      </div>
+          
+                                </form>
+                            </div>
+                  </ng-template>
+                 
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>
