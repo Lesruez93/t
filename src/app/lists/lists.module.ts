@@ -1,22 +1,22 @@
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MaterialModule } from '../app.module';
-import { MediaComponent } from './media.component';
-import { MediaRoutes } from './media.routing';
+import {NgModule} from '@angular/core';
+import {RouterModule} from '@angular/router';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {MaterialModule} from '../app.module';
 import {VgCoreModule} from 'videogular2/core';
 import {VgControlsModule} from 'videogular2/controls';
 import {VgOverlayPlayModule} from 'videogular2/overlay-play';
 import {VgBufferingModule} from 'videogular2/buffering';
 import {EditorModule} from '@tinymce/tinymce-angular';
 import {NgxSummernoteModule} from 'ngx-summernote';
+import {ListsRoutes} from './lists.routing';
+import {ListsComponent} from './lists.component';
 
 
 @NgModule({
     imports: [
         CommonModule,
-        RouterModule.forChild(MediaRoutes),
+        RouterModule.forChild(ListsRoutes),
         FormsModule,
         MaterialModule,
         VgCoreModule,
@@ -27,6 +27,6 @@ import {NgxSummernoteModule} from 'ngx-summernote';
         EditorModule,
         NgxSummernoteModule
     ],
-  declarations: [MediaComponent]
+  declarations: [ListsComponent]
 })
-export class MediaModule { }
+export class ListsModule { }

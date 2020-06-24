@@ -35,7 +35,7 @@ export const AppRoutes: Routes = [
 
             {      
                 path: '',
-                loadChildren: './media/media.module#MediaModule'},
+                loadChildren: './lists/lists.module#ListsModule'},
   ],
         canActivate: [AuthGuardService]
 

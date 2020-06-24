@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
+import {ListsComponent} from './lists.component';
 
-import { MediaComponent } from './media.component';
 
-export const MediaRoutes: Routes = [
+export const ListsRoutes: Routes = [
     {
 
       path: '',
       children: [ {
         path: 'lists/:id',
-        component: MediaComponent
+        component: ListsComponent
     }]
 }
 ];

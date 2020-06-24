@@ -1,17 +1,15 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {GsService} from '../gs.service';
 import * as firebase from 'firebase';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {switchMap} from 'rxjs/operators';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
-  selector: 'app-media',
-  templateUrl: './media.component.html',
-  styleUrls: ['./media.component.scss']
+  selector: 'app-lists',
+  templateUrl: './lists.component.html',
+  styleUrls: ['./lists.component.scss']
 })
-export class MediaComponent implements OnInit {
+export class ListsComponent implements OnInit {
     title: any;
     private cards: any;
   private docid: any;
