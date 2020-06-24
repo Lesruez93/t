@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import PerfectScrollbar from 'perfect-scrollbar';
 import { AuthService } from '../auth.service';
 import { Router} from "@angular/router";
+import {AngularFireAuth} from '@angular/fire/auth';
 
 declare const $: any;
 
@@ -52,32 +53,7 @@ export const ROUTES: RouteInfo[] = [{
     //
     // },
 
-    {
-        path: '/media' ,
-        title: 'Programs',
-        type: 'link',
-        icontype: 'fitness_center'
 
-    },
-
-
-    {
-        path: '/store' ,
-        title: 'Supplements',
-        type: 'link',
-        icontype: 'store'
-
-    }
-
-
-    ,
-    {
-        path: '/articles' ,
-        title: 'Articles',
-        type: 'link',
-        icontype: 'import_contacts'
-
-    }
 
     // {
     //     path: '/tables',
@@ -113,7 +89,17 @@ export class SidebarComponent implements OnInit {
     public menuItems: any[];
     churchname;
     username;
-    constructor(private auth:AuthService,private router: Router){
+    private userPhoto: string;
+    private userName: any;
+    constructor(private auth:AuthService,private router: Router,
+    private afAuth:AngularFireAuth,
+    ){
+
+        afAuth.user.subscribe(res=>{
+            this.userName = res.displayName
+            this.userPhoto = res.photoURL
+        })
+    //    this.userPhoto = afAuth.auth.currentUser.photoURL
 
     }
 

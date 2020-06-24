@@ -3,6 +3,7 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {auth} from 'firebase';
 
 
 declare var $: any;
@@ -32,7 +33,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     constructor(private element: ElementRef, private router: Router,
                 private afAuth:AngularFireAuth,
                 private spinner: NgxSpinnerService,
-                private db: AngularFirestore) {
+                private afs: AngularFirestore) {
         this.nativeElement = element.nativeElement;
         this.sidebarVisible = false;
 
@@ -74,32 +75,44 @@ export class LoginComponent implements OnInit, OnDestroy {
         body.classList.remove('off-canvas-sidebar');
     }
 
-    onlogin() {
-        console.log(this.username + '  ' + this.password);
-
-        this.spinner.show();
-
-        this.afAuth.auth.signInWithEmailAndPassword(this.username,this.password).then(res=>{
-            console.log(res.user.uid)
-            this.spinner.hide()
-            this.router.navigate(['/dashboard']);
 
 
-        }).catch(error=>{
-            console.log(error)
-            this.error = 'Incorrect username and password';
-            this.spinner.hide()
 
 
-        })
+
+    private updateUserData(user) {
+        const usersRef = this.afs.collection('users').doc(user.uid)
+
+        usersRef.get().subscribe((docSnapshot) => {
+            if (docSnapshot.exists) {
+                console.log("it exists")
+                localStorage.setItem('role',"true")
+
+            } else {
+                const data = {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                    photoURL: user.photoURL,
+
+                }
+                // Sets user data to firestore on login
+                this.afs.doc(`users/${user.uid}`).set(data,{merge:true}).then(r=> {
+                    this.router.navigate(['/dashboard']);
+
+
+                })
+            }})
+
+
 
 
     }
-
-
-    register() {
-        this.router.navigate(['/register']);
-
+    async doGoogleLogin() {
+        const provider = new auth.GoogleAuthProvider();
+        this.afAuth.auth.signInWithPopup(provider).then(r=>{
+            this.updateUserData(r.user);
+        });
     }
 
 

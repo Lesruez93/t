@@ -1,58 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {AngularFireStorage} from '@angular/fire/storage';
-import {Observable} from 'rxjs';
-import {finalize} from 'rxjs/operators';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {AuthService} from '../auth.service';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {NotificationService} from '../notification.service';
-import {SwalService} from '../swal.service';
-
-declare var $: any;
-
-
-declare var $: any;
-declare interface TableData {
-  headerRow: string[];
-
-}
-
-export interface TableData2 {
-  headerRow: string[];
-
-}
-
-declare interface podcast {
-     id:string;
-     date:string;
-     title:string;
-     series:string;
-     description:string;
-     url:string;
-}
-declare interface Leader{
-  id:string;
-  name:string;
-  url:string;
-}
-
-declare interface Series{
-  id:string,
-  title:string,
-  description:string
-}
-
-declare interface Cms{
-  livestream:string,
-  playlist:string
-}
-
-declare interface Playlist{
-     Name:string,
-     Playlist:string
-}
-
-
+import {GsService} from '../gs.service';
+import * as firebase from 'firebase';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-media',
@@ -60,285 +12,102 @@ declare interface Playlist{
   styleUrls: ['./media.component.scss']
 })
 export class MediaComponent implements OnInit {
-    public tableData1: TableData;
+    title: any;
+    private cards: any;
+  private docid: any;
+  private editkey: any;
+  private data: string;
+  date: any;
 
-    podcasts: Observable<any>;
-
-    editing;
-    config = {
-        placeholder: '',
-        tabsize: 2,
-        height: '200px',
-        uploadImagePath: 'gs://my-pt-zim-fb13e.appspot.com',
-        toolbar: [
-            ['misc', ['codeview', 'undo', 'redo']],
-            ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-            ['fontsize', ['fontname', 'fontsize', 'color']],
-            ['para', ['style', 'ul', 'ol', 'paragraph', 'height']],
-            ['insert', ['table', 'picture', 'link', 'hr']]
-        ],
-        fontNames: ['Helvetica', 'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Roboto', 'Times']
-    }
-
-
-  public editing_podcast:podcast;
-
-  apid;
-  date;
- title;
-  apseries;
-  category;
-  description;
-  adding:boolean = true;
-  public video:string = "http://static.videogular.com/assets/audios/videogular.mp3";
-
-  save_disabled:boolean = true;
-  leaders:Observable<any>;
-
-  addingseries = false;
-  cms:Cms = {livestream:"",playlist:""};
-  org_id
-    uploadPercent: Observable<number>;
-    downloadURL: Observable<string>;
-  serieses:Observable<Series[]>;
-  sources: Array<Object>;
-    private upload: any;
-    private getCancelButton: boolean = true;
-    private trainer: any;
-  constructor(private storage:AngularFireStorage,
-              private notification:NotificationService,
+  constructor(
               private db:AngularFirestore,
-              private swalert:SwalService,
-              public afAuth:AngularFireAuth){
-    this.org_id = AuthService.org_id;
-    
-    afAuth.authState.subscribe((res=>{
-        if(res&&res.uid){
-            this.trainer = res.uid
-
-        }
-    }))
-
-
+             // private g:GsService,
+              private route: ActivatedRoute,
+              private cdr:ChangeDetectorRef,
+              public afAuth:AngularFireAuth) {
+     
   }
 
-  onfilter(id){
-    this.category = id;
-   // this.loadpodcasts();
-  }
+    ngOnInit(): void {
 
-  loadpodcasts(){
-    this.podcasts = this.db.collection(this.org_id+"/cms/series"+ this.category +"/audiofiles",
-            ref => ref.orderBy('id', 'desc')).snapshotChanges()
-                    .map(changes=>{
-                        return changes.map(
-                            a=>{
-                            const data = a.payload.doc.data() as podcast;
-                            data.id = a.payload.doc.id
-                            return data
-                            }
-                        ) 
-                        });
-                        this.showAddNew();
-
-  }
-
-  onShowEdit(pod:podcast){
-      this.adding = false;
-
-      this.date = pod.date;
-      this.title = pod.title;
-      this.description = pod.description;
-      this.video = pod.url;
-      this.apid = pod.id;
-  }
- 
-  ngOnInit() {
-  //  this.getPlaylist();
-      this.tableData1 = {
-          headerRow: [ 'Date', 'Title', 'Description','Series']
-       };
-  }
-
-  uploadFile(event) {
-    // take the filename from the file
-
-          var fil = document.querySelector("#fUpload");
-      // @ts-ignore
-
-      if ( /\.(m4v|mp4)$/i.test(fil.files[0].name) === false )
-          {
-              this.notification.showNotification("Format not supported please upload  Mp4 files only",'top','center','danger','Failed')
-          // @ts-ignore
-              document.getElementById('fUpload').value = null
-          }
-
-          else {
-
-
-              const file = event.target.files[0];
-              const filePath = this.makeid();
-              const fileRef = this.storage.ref(filePath);
-              const task = this.storage.upload(filePath, file);
-
-              // observe percentage changes
-              this.uploadPercent = task.percentageChanges();
-              // get notified when the download URL is available
-          this.getCancelButton = false
-          this.notification.showNotification("Your file is being uploaded","top","center",'info','Uploading...');
-
-          this.upload =  task.snapshotChanges().pipe(
-                  finalize(() =>
-                      {
-                          this.downloadURL = fileRef.getDownloadURL();
-                          fileRef.getDownloadURL().subscribe(x=>{console.log(x);
-                              this.video = x;
-                              this.save_disabled = false;
-                              this.notification.showNotification('Upload Succes','top','left','success','success')
-                          });
-                      }
-                  ))
-                  .subscribe()
-
-
-          }
-
-
-
-
-
-  }
-    cancel(){
-      this.uploadPercent = null
-        // @ts-ignore
-        document.getElementById('fUpload').value = null;
-
-        this.upload.unsubscribe()
-        this.getCancelButton = true
-
+      console.log()
+      this.db.collection('tasks').doc(this.route.snapshot.paramMap.get('id'))
+          .collection('cards').valueChanges({idField:'docid'}).subscribe(res=>{
+        this.cards = res
+      })
     }
-  save(){
-    var Id = new Date().getTime() / 1000;
-  
-        var data = {
-                    category:this.category,
-                    date:this.date,
-                    title:this.title,
-                    video:this.video,
-                    description:this.description,
-                    trainer:this.trainer
-                }
 
-        this.db.collection("Programs").add(data)
-        .then((x)=>{
-          this.notification.showNotification("Success!","top","right",'success','Successful');
-        });
-        this.showAddNew()
-        this.save_disabled = true;
+    save() {
+        this.db.collection('tasks').doc(this.route.snapshot.paramMap.get('id'))
+            .collection('cards').add({title:this.title})
+    }
 
-  }
+    delete(data: any,id) {
+    this.assg(id)
+      this.db.collection('tasks').doc(this.route.snapshot.paramMap.get('id'))
+          .collection('cards').doc(this.docid).set({list:{[data.key]: firebase.firestore.FieldValue.delete()}}, {merge: true})
+    }
+    edit(data: any,id) {
+      console.log(data)
+      this.assg(id)
+      this.editkey = data.key
 
-  showAddNew()
-  {
-    this.adding = true;
-    this.date = "";
-    this.title ="";
-    this.description ="";
-    this.video="";
-    this.apid="";
+      this.title = data.value.title
+    }
 
-    console.log(this.makeid());
+    comment(t: any) {
+        
+    }
 
-  };
+    done(title: any,id) {
+      this.assg(id)
 
-makeid() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  
-    for (var i = 0; i < 15; i++)
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-  
-    return text;
-  }
-  
-  
+      this.db.collection('tasks').doc(this.route.snapshot.paramMap.get('id'))
+          .collection('cards').doc(this.docid).set({list:{[title.key]:{status:"done"}}}, {merge: true})
+    }
 
-  onDelete(id:string){
+    update(title: any,id) {
+    //this.assg(id)
 
+      this.db.collection('tasks').doc(this.route.snapshot.paramMap.get('id'))
+          .collection('cards').doc(this.docid).set({list:{[this.editkey]:{title:this.title}}}, {merge: true}).then(re=>{
+            this.cdr.detectChanges()
+      })
+    }
 
-    this.swalert.delete().then((result) => {
-      if (result.value) {
-        this.db.collection(this.org_id).doc("cms").collection('series')
-            .doc("d48INFwsfXQM8xdjl4td").collection("audiofiles").doc(id).delete();
- 
-      this.swalert.deleted()
+    progress(title: any,id) {
+      this.assg(id)
 
-      } else {
-        this.swalert.cancelled()
+      this.db.collection('tasks').doc(this.route.snapshot.paramMap.get('id'))
+          .collection('cards').doc(this.docid).set({list:{[title.key]:{status:"working"}}}, {merge: true})
+    }
+
+    notdone(title: any,id) {
+      this.assg(id)
+
+      this.db.collection('tasks').doc(this.route.snapshot.paramMap.get('id'))
+          .collection('cards').doc(this.docid).set({list:{[title.key]:{status:"notdone"}}}, {merge: true})
+    }
+
+    due(t: any,id) {
+      this.assg(id)
+      this.editkey = t.key
+    }
+
+    saveCard() {
+      console.log(this.docid)
+        this.db.collection('tasks').doc(this.route.snapshot.paramMap.get('id'))
+            .collection('cards').doc(this.docid).set({list:{[this.title]:{title:this.title,duedate:this.date}}}, {merge: true})
       }
-    })
-  
 
-  }
-
-  update(){
-    var data = {
-        date:this.date,
-        title:this.title,
-        series:this.category,
-        description:this.description,
-        url:this.video
+    assg(c: any) {
+        this.docid = c.docid
     }
-   this.db.collection(this.org_id).doc("cms").collection("series").doc("d48INFwsfXQM8xdjl4td").collection("audiofiles").doc(this.apid).update(data)
-   .then(
-     (x)=>{this.notification.showNotification("Updated!","top","right",'success','Successful')}
-   );
+
+  saveDate(title: any,id) {
+   // this.assg(id)
+
+    this.db.collection('tasks').doc(this.route.snapshot.paramMap.get('id'))
+        .collection('cards').doc(this.docid).set({list:{[this.editkey]:{duedate:this.date}}}, {merge: true})
   }
-
-  onCancelEdit(){
-    this.showAddNew();
-  }
-
-  onAddSeries(){
-   
-    this.addingseries = true;
-  }
-  onPostNewSeries(){
-    console.log("posting series "+ this.category);
-    var data = {
-         title:this.apseries,
-         desc:this.description    
-    }
-    this.db.collection(this.org_id).doc("cms").collection("series").add(data).then(
-      x=>{
-        console.log(x.id);
-        this.category = x.id;
-        this.addingseries = false;
-       // this.loadpodcasts();
-        this.notification.showNotification("Series Captured!","top","right",'success','Successful');
-      }
-    );
-    
-  }
-
-  updatevids(){
-    //this.db.collection(this.org_id).doc("cms").update(this.cms);
-  }
-
-
-playlist:Observable<any[]>;
-    categories: any = ['Weight Lifting','Weight Loss' ];
-getPlaylist() {
-  
-  this.playlist = this.db.collection(this.org_id+"/cms/playlists",ref => ref.orderBy('id', 'desc')).snapshotChanges()
-  .map(changes => { 
-        return changes.map(
-            a=>{
-                const data = a.payload.doc.data() as Playlist;       
-                return data
-              })
-    })  
-} 
-
 }

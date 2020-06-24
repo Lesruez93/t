@@ -9,3 +9,41 @@
 ::ng-deep .mat-progress-bar {
   border-radius: 2px;
 }
+
+.card-label {
+  background-color: #b3bac5;
+  border-radius: 4px;
+  color: #fff;
+  display: block;
+  margin-right: 4px;
+  width: 100%;
+  overflow: hidden;
+  padding: 4px 6px;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.card-label-green {
+  background-color: #61bd4f;
+}
+
+.card-label-red {
+  background-color: #bd060e;
+}
+.card-label-orange {
+  background-color: orange;
+}
+.card-label.mod-card-front {
+  font-size: 12px;
+  font-weight: 700;
+  height: 8px;
+  line-height: 100px;
+  margin: 2px 4px 4px 0;
+  //max-width: 40px;
+  min-width: 40px;
+  padding: 2%;
+  text-shadow: none;
+  width: 100%;
+}

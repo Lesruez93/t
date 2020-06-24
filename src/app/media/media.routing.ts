@@ -7,7 +7,7 @@ export const MediaRoutes: Routes = [
 
       path: '',
       children: [ {
-        path: 'media',
+        path: 'lists/:id',
         component: MediaComponent
     }]
 }

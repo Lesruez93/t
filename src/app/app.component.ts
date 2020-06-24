@@ -16,9 +16,9 @@ export class AppComponent implements OnInit {
     // afAuth.authState.subscribe(res=>{
     //   if (res && res.uid){
     //     console.log(res.uid+"   logged in")
-    //  //   this.router.navigate(['/dashboard'])
+    //    this.router.navigate(['/dashboard'])
     //   } else {
-    //  //   this.router.navigate(['/login'])
+    //    this.router.navigate(['/login'])
     //   }
     // })
   }

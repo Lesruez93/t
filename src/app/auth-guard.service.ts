@@ -16,7 +16,7 @@ export class AuthGuardService implements CanActivate {
 
      this.auth.authState.subscribe(res=>{
       if (res && res.uid) {
-        console.log("logged innnnn")
+          this.router.navigate(['/dashboard'])
 
       }
       else {
