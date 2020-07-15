@@ -1,6 +1,12 @@
 <div class="main-content">
+  <div class="text-center"  >
+
+    <button data-toggle="modal" class="btn btn-primary"  data-target="#exampleModal" type="button">Create new Board</button>
+
+  </div>
     <div class="container-fluid">
       <br/><br/><br/>
+
         <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6" *ngFor=" let t of tasks" >
               <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -39,12 +45,7 @@
                 <p class="card-category">{{t.title}}</p>
                 </div>
                 <div class="card-footer">
-                  <div class="stats"  data-toggle="modal" data-target="#exampleModal">
-                    <i class="material-icons " >note_add</i>
-                    <a >Create new Board</a>
 
-
-                  </div>
                   <div class="dropdown show">
                     <i class="material-icons" data-toggle="dropdown">more_vert</i>
 
