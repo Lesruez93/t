@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
 
     private tasks: any;
     private taskk: any;
+    private role: any;
 
     constructor(
         private  af:AngularFirestore,
@@ -36,25 +37,6 @@ export class DashboardComponent implements OnInit {
 
 
 
-
-        this.afs.authState.subscribe(res => {
-            this.af.collection('tasks',ref => ref.where('uid','==',this.afs.auth.currentUser.uid))
-                .valueChanges({idField:'docid'}).subscribe(res=>{
-                this.tasks = res
-            })
-
-            if (res && res.uid) {
-                this.logged = true
-
-            }
-            else {
-                this.logged = false
-
-                this.nav();
-
-            }
-
-        });
 
         //   this.dataRef = db.object('VehicleInfo');
 
@@ -100,12 +82,35 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit(): void {
 
-        $(document).ready(() => {
+this.afs.authState.subscribe((res:any)=>{
 
-            console.log("wowsccdsccc")
-        });
+    this.af.collection('users').doc(res.uid).valueChanges()
+        .subscribe((res:any)=>{
+            this.role = res.role
+            if (res.role == 'admin'){
+                this.afs.authState.subscribe(res => {
+                    this.af.collection('tasks')
+                        .valueChanges({idField:'docid'}).subscribe(res=>{
+                        this.tasks = res
+                    })
 
-        //$('.dropdown-toggle').dropdown()
+
+
+                });
+            } else {
+                this.afs.authState.subscribe(res => {
+                    this.af.collection('tasks',ref => ref.where('uid','==',this.afs.auth.currentUser.uid))
+                        .valueChanges({idField:'docid'}).subscribe(res=>{
+                        this.tasks = res
+                    })
+
+
+
+                });
+            }
+        })
+})
+
 
     }
 
@@ -128,7 +133,7 @@ export class DashboardComponent implements OnInit {
             {
                 title:this.title,
                 date: moment().format('YYYY-MM-DD HH:mm:s'),
-
+                name:this.afs.auth.currentUser.displayName,
                 uid:this.afs.auth.currentUser.uid,
                 id:Date.now()
             }
@@ -141,6 +146,7 @@ export class DashboardComponent implements OnInit {
         let data =
             {
                 title:this.title,
+                name:this.afs.auth.currentUser.displayName,
             }
 
         this.af.collection('tasks').doc(id.docid).update(data).then(res=>{
