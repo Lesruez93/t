@@ -16,6 +16,7 @@ export class ListsComponent implements OnInit {
   private editkey: any;
   private data: string;
   date: any;
+  private role: string
 
   constructor(
               private db:AngularFirestore,
@@ -23,8 +24,13 @@ export class ListsComponent implements OnInit {
               private route: ActivatedRoute,
               private cdr:ChangeDetectorRef,
               public afAuth:AngularFireAuth) {
-     
-  }
+
+    this.afAuth.authState.subscribe((res:any)=>{
+    this.db.collection('users').doc(res.uid).valueChanges()
+        .subscribe((res:any)=> {
+          this.role = res.role
+        })
+  })}
 
     ngOnInit(): void {
 

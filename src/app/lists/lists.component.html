@@ -2,7 +2,8 @@
 
 
     <div class="container-fluid" style=" padding: 3%">
-        <div style="text-align: -webkit-center;">  <button type="button"  data-toggle="modal" data-target="#listModal"class="btn note-btn-primary" >Add List</button> </div>
+        <div  *ngIf="role!='admin'" style="text-align: -webkit-center;">
+            <button type="button"  data-toggle="modal" data-target="#listModal"class="btn note-btn-primary" >Add List</button> </div>
 
 
         <div class="row" style=" padding: 3%">
@@ -95,7 +96,7 @@
                               </div>
 
 
-                                  <div class="td-actions text-right">
+                                  <div  *ngIf="role!='admin'" class="td-actions text-right">
                                       <div class="dropdown show">
                                   <button mat-raised-button type="button" data-toggle="dropdown"  class="btn btn-primary btn-link btn-sm">
                                       <i class="material-icons">more_vert</i>
@@ -121,7 +122,7 @@
                           </div>
 
 
-                      <div class="stats" style="    align-self: center;" (click)="assg(c)"  data-toggle="modal" data-target="#exampleModal">
+                      <div   *ngIf="role!='admin'" class="stats" style="    align-self: center;" (click)="assg(c)"  data-toggle="modal" data-target="#exampleModal">
                        <div *ngIf="cards.length > 0">
                           <i class="material-icons " >note_add</i>
                           <a >Add another card</a>
