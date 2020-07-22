@@ -137,9 +137,7 @@ console.log(this.today)
 
     export() {
         doc.autoTable({ html: '#dt' })
-
-
-
         doc.save('report.pdf')
+      this.report = false
     }
 }
