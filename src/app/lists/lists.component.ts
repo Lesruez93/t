@@ -38,6 +38,7 @@ export class ListsComponent implements OnInit {
       this.db.collection('tasks').doc(this.route.snapshot.paramMap.get('id'))
           .collection('cards').valueChanges({idField:'docid'}).subscribe(res=>{
         this.cards = res
+
       })
     }
 
@@ -113,5 +114,10 @@ export class ListsComponent implements OnInit {
 
     this.db.collection('tasks').doc(this.route.snapshot.paramMap.get('id'))
         .collection('cards').doc(this.docid).set({list:{[this.editkey]:{duedate:this.date}}}, {merge: true})
+  }
+
+
+  g(){
+
   }
 }

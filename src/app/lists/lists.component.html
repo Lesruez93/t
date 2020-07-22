@@ -2,6 +2,21 @@
 
 
     <div class="container-fluid" style=" padding: 3%">
+        <div class="card">
+        <table class="table-striped table-responsive">
+            <tr>
+            <th></th>
+                <th>Title</th>
+
+            </tr>
+            <tr *ngFor="let card of cards">
+                <td> {{card.title}}</td>
+
+
+            </tr>
+        </table>
+        </div>
+
         <div  *ngIf="role!='admin'" style="text-align: -webkit-center;">
             <button type="button"  data-toggle="modal" data-target="#listModal"class="btn note-btn-primary" >Add List</button> </div>
 

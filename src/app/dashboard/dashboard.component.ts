@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit {
     private tasks: any;
     private taskk: any;
     private role: any;
+    status: any;
 
     constructor(
         private  af:AngularFirestore,
