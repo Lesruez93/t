@@ -1,21 +1,9 @@
 <div class="main-content">
 
     <div class="container-fluid">
-        <div class="text-center"  >
-            <button *ngIf="role!='admin'"  data-toggle="modal" class="btn btn-primary"  data-target="#exampleModal" type="button">Generate Reports</button>
-<div class="row">
-    <div class="col-md">
-        <label class="text-primary">Task Status</label>
-        <mat-select [(ngModel)]="status">
-            <mat-option value="Progress">Progress</mat-option>
-        </mat-select>
-    </div>
-    <div class="col-md"></div>
-
-</div>
-            <button *ngIf="role!='admin'"  data-toggle="modal" class="btn btn-primary"  data-target="#exampleModal" type="button">Create new Board</button>
-
-        </div>
+  <div class="text-center">
+        <button *ngIf="role!='admin'"  data-toggle="modal" class="btn btn-primary"  data-target="#exampleModal" type="button">Create new Board</button>
+  </div>
       <br/><br/><br/>
 
         <div class="row">

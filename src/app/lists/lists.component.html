@@ -2,19 +2,76 @@
 
 
     <div class="container-fluid" style=" padding: 3%">
-        <div class="card">
-        <table class="table-striped table-responsive">
+        <div class="text-center"  >
+            <button *ngIf="role=='admin' && !report"  (click)="report = true" class="btn btn-primary"
+                    data-target="#exampleModal" type="button">Generate Reports</button>
+        </div>
+        <div *ngIf="report" class="card" style="padding: 30px">
+            <div class="text-center"  >
+
+
+                <div class="row">
+                    <div class="col-md">
+                        <label class="text-primary">Task Status</label>
+                        <mat-select class="mat-select" [(ngModel)]="status">
+                            <mat-option value="done">Done</mat-option>
+                            <mat-option value="working"> In Progress</mat-option>
+                            <mat-option value="notdone">Not Done</mat-option>
+
+                        </mat-select>
+                    </div>
+                    <div *ngIf="status != 'done'" class="col-md">
+                        <label class="text-primary">Due Date Status</label>
+                        <mat-select style="border-color: #4a148c" class="mat-select" [(ngModel)]="duestatus">
+                            <mat-option value="p">Pending</mat-option>
+                            <mat-option value="o"> Overdue</mat-option>
+
+                        </mat-select>
+                    </div>
+
+                </div>
+
+            </div>
+        <table id="dt" style="margin-top: 30px" class="table-striped ">
+            <thead>
             <tr>
-            <th></th>
                 <th>Title</th>
+                <th>Status</th>
+                <th>Due Date</th>
+
+
 
             </tr>
-            <tr *ngFor="let card of cards">
-                <td> {{card.title}}</td>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let card of cards">
+            <tr *ngFor="let c of card?.list | keyvalue">
+<!--                <ng-container  *ngIf="c?.value?.status == status">-->
+<!--                <td (click)="lg(c?.value?.duedate)"> {{c?.value?.title}}</td>-->
+<!--                <td> {{c?.value?.status}}</td>-->
+<!--                <td> {{c?.value?.duedate?.toDate()| date: 'dd/MM/yyyy'}}</td>-->
+<!--                </ng-container>-->
 
+                <ng-container *ngIf="duestatus == 'o' && c?.value?.status == status">
+                <ng-container *ngIf="c?.value?.duedate.seconds > today">
+                <td> {{c?.value?.title}}</td>
+                <td> {{c?.value?.status}}</td>
+                <td> {{c?.value?.duedate?.toDate()| date: 'dd/MM/yyyy'}}</td>
+            </ng-container>
+                </ng-container>
 
+            <ng-container *ngIf="duestatus == 'p' && c?.value?.status == status">
+                            <ng-container *ngIf="c?.value?.duedate.seconds <= today">
+                                <td> {{c?.value?.title}}</td>
+                                <td> {{c?.value?.status}}</td>
+                                <td> {{c?.value?.duedate?.toDate()| date: 'dd/MM/yyyy'}}</td>
+                            </ng-container>
+            </ng-container>
             </tr>
+            </ng-container>
+            </tbody>
         </table>
+         <div class="text-center">   <button  (click)="export()"  class="btn " >Export to PDF</button></div>
         </div>
 
         <div  *ngIf="role!='admin'" style="text-align: -webkit-center;">

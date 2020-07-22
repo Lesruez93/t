@@ -3,7 +3,11 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase';
 import {ActivatedRoute} from '@angular/router';
+import * as moment from 'moment';
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
 
+const doc = new jsPDF()
 @Component({
   selector: 'app-lists',
   templateUrl: './lists.component.html',
@@ -16,7 +20,11 @@ export class ListsComponent implements OnInit {
   private editkey: any;
   private data: string;
   date: any;
+  today :any = moment(Date.now()).format('YYYY-MM-DD')
   private role: string
+    status: any = 'done';
+    duestatus: any = 'p';
+    report: boolean;
 
   constructor(
               private db:AngularFirestore,
@@ -24,7 +32,8 @@ export class ListsComponent implements OnInit {
               private route: ActivatedRoute,
               private cdr:ChangeDetectorRef,
               public afAuth:AngularFireAuth) {
-
+this.today = moment(this.today).unix()
+console.log(this.today)
     this.afAuth.authState.subscribe((res:any)=>{
     this.db.collection('users').doc(res.uid).valueChanges()
         .subscribe((res:any)=> {
@@ -38,6 +47,7 @@ export class ListsComponent implements OnInit {
       this.db.collection('tasks').doc(this.route.snapshot.paramMap.get('id'))
           .collection('cards').valueChanges({idField:'docid'}).subscribe(res=>{
         this.cards = res
+          console.log(this.cards)
 
       })
     }
@@ -120,4 +130,16 @@ export class ListsComponent implements OnInit {
   g(){
 
   }
+
+    lg(duedate: any) {
+        console.log(duedate.seconds)
+    }
+
+    export() {
+        doc.autoTable({ html: '#dt' })
+
+
+
+        doc.save('report.pdf')
+    }
 }
